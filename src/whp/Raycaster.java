@@ -20,7 +20,7 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
 
     int[][] worldMap = {
             {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-            {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+            {1,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
             {1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
             {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
             {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
@@ -38,9 +38,9 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
             {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
             {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
             {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-            {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,1},
-            {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,1},
-            {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,1},
+            {1,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,1},
+            {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+            {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
             {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
     };
 
@@ -90,9 +90,9 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
         try {
             enemyTex = ImageIO.read(getClass().getResource("/sprite2.png"));
         } catch (IOException e) { e.printStackTrace(); }
-        playBackground("/sounds/bg.wav");
+        playBackground("/bg.wav");
 
-        // spawn enemies safely
+
         for (int x = 0; x < mapWidth; x++) {
             for (int y = 0; y < mapHeight; y++) {
                 if (x >= 0 && x < worldMap.length && y >= 0 && y < worldMap[0].length) {
@@ -104,7 +104,7 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
             }
         }
 
-        // Start moveset
+
         unlockedMoves.add(new Move("Attack", 5, 0));
         unlockedMoves.add(new Move("Heal", 0, 5));
     }
@@ -124,6 +124,23 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
         bgClip = loadClip(path);
         if(bgClip!=null) bgClip.loop(Clip.LOOP_CONTINUOUSLY);
     }
+    private void playBattle(String path){
+        if(bgClip!=null && bgClip.isRunning()){ bgClip.stop(); }
+        if(battleClip!=null && battleClip.isRunning()){ battleClip.stop(); battleClip.close(); }
+        battleClip = loadClip(path);
+        if(battleClip!=null) battleClip.loop(Clip.LOOP_CONTINUOUSLY);
+    }
+    private void stopBattle(){
+        if(battleClip!=null && battleClip.isRunning()){ battleClip.stop(); battleClip.close(); }
+        if(bgClip!=null) bgClip.loop(Clip.LOOP_CONTINUOUSLY);
+    }
+    private void playEffect(String path){
+        new Thread(() -> {
+            Clip clip = loadClip(path);
+            if(clip!=null) clip.start();
+        }).start();
+    }
+
 
     @Override
     public void paintComponent(Graphics g){
@@ -152,7 +169,7 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
             for(int i=screenWidth*screenHeight/2;i<screenWidth*screenHeight;i++) pixels[i]=0x444444;
             double[] zBuffer = new double[screenWidth];
 
-            // raycast walls
+
             for(int x=0;x<screenWidth;x++){
                 double cameraX=2*x/(double)screenWidth-1;
                 double rayDirX=dirX+planeX*cameraX;
@@ -187,22 +204,23 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
                 zBuffer[x]=perpWallDist;
             }
 
-            // update enemies
+
             for(Sprite s: enemies){
                 double dx=posX-s.x, dy=posY-s.y;
                 double dist=Math.sqrt(dx*dx+dy*dy);
                 if(dist>0.5){
                     s.x += dx/dist*0.02;
                     s.y += dy/dist*0.02;
-                } else {
+                } else if(!inBattle){
                     // trigger battle
                     inBattle = true;
                     battleEnemy = s;
                     enemyHP = s.health;
+                    playBattle("/battle.wav");
                 }
             }
 
-            // draw enemies
+
             for(Sprite s: enemies){
                 double spriteX=s.x-posX, spriteY=s.y-posY;
                 double invDet=1.0/(planeX*dirY-dirX*planeY);
@@ -268,6 +286,11 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
         playerHP += move.heal;
         if(playerHP>20) playerHP=20;
 
+        if(move.damage>0) playEffect("/attack.wav");
+        if(move.heal>0) playEffect("/heal.wav");
+        if(move.heal>0) playEffect("/heal.wav");
+
+
         if(enemyHP<=0){
             enemies.remove(battleEnemy);
             inBattle=false;
@@ -278,6 +301,7 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
             if(enemiesDefeated==1) unlockedMoves.add(new Move("Strong Attack", 8, 0));
             if(enemiesDefeated==3) unlockedMoves.add(new Move("Mega Strike", 12, 0));
             if(enemiesDefeated==5) unlockedMoves.add(new Move("Full Heal", 0, 20));
+            if(enemiesDefeated==10) unlockedMoves.add(new Move("suicidal charge", 30, -10));
         } else {
             // Enemy turn
             playerHP -= 3;
@@ -314,7 +338,7 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
     }
 
     public static void main(String[] args){
-        JFrame frame=new JFrame("Dungeonexplorere");
+        JFrame frame=new JFrame("Dungeonexplorerer");
         Raycaster rc=new Raycaster();
         frame.add(rc);
         frame.pack();
