@@ -75,6 +75,8 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
         int heal;
         Move(String n, int d, int h) { name = n; damage = d; heal = h; }
     }
+    Clip bgClip;
+    Clip battleClip;
 
     java.util.List<Move> unlockedMoves = new ArrayList<>();
 
@@ -88,6 +90,7 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
         try {
             enemyTex = ImageIO.read(getClass().getResource("/sprite2.png"));
         } catch (IOException e) { e.printStackTrace(); }
+        playBackground("/sounds/bg.wav");
 
         // spawn enemies safely
         for (int x = 0; x < mapWidth; x++) {
@@ -104,6 +107,22 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
         // Start moveset
         unlockedMoves.add(new Move("Attack", 5, 0));
         unlockedMoves.add(new Move("Heal", 0, 5));
+    }
+    private Clip loadClip(String path){
+        try{
+            URL url = getClass().getResource(path);
+            if(url==null){ System.err.println("Sound not found: "+path); return null; }
+            AudioInputStream ais = AudioSystem.getAudioInputStream(url);
+            Clip clip = AudioSystem.getClip();
+            clip.open(ais);
+            return clip;
+        }catch(Exception e){ e.printStackTrace(); return null; }
+    }
+
+    private void playBackground(String path){
+        if(bgClip!=null && bgClip.isRunning()){ bgClip.stop(); bgClip.close(); }
+        bgClip = loadClip(path);
+        if(bgClip!=null) bgClip.loop(Clip.LOOP_CONTINUOUSLY);
     }
 
     @Override
