@@ -8,6 +8,8 @@ import java.awt.image.DataBufferInt;
 import java.util.*;
 import javax.imageio.ImageIO;
 import java.io.IOException;
+import java.net.URL;
+import javax.sound.sampled.*;
 
 public class Raycaster extends JPanel implements KeyListener, Runnable {
     final int screenWidth = 640;
@@ -19,7 +21,7 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
     int[][] worldMap = {
             {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
             {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-            {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+            {1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
             {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
             {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
             {1,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,1},
