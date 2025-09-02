@@ -54,19 +54,22 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
 
     static class Sprite {
         double x, y;
-        int health = 10;
+        int health;
+        int damage;
         BufferedImage tex;
-        Sprite(double x, double y, BufferedImage tex) { this.x = x; this.y = y; this.tex = tex; }
+        Sprite(double x, double y, BufferedImage tex, int health, int damage){
+            this.x = x; this.y = y; this.tex = tex; this.health = health; this.damage = damage;
+        }
     }
+
+    boolean inBattle=false; Sprite battleEnemy; int playerHP=20, enemyHP; int playerLevel=1; int enemiesDefeated=0;
+    double shakeX=0, shakeY=0;
+
+
 
     java.util.List<Sprite> enemies = new ArrayList<>();
 
     BufferedImage enemyTex;
-    boolean inBattle = false;
-    Sprite battleEnemy;
-    int playerHP = 20;
-    int enemyHP;
-    int enemiesDefeated = 0;
 
     // Define moves
     static class Move {
@@ -97,7 +100,7 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
             for (int y = 0; y < mapHeight; y++) {
                 if (x >= 0 && x < worldMap.length && y >= 0 && y < worldMap[0].length) {
                     if (worldMap[x][y] >= 2 && worldMap[x][y] <= 4) {
-                        enemies.add(new Sprite(x + 0.5, y + 0.5, enemyTex));
+                        enemies.add(new Sprite(x + 0.5, y + 0.5, enemyTex, 80,10));
                         worldMap[x][y] = 0;
                     }
                 }
@@ -204,14 +207,32 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
                 zBuffer[x]=perpWallDist;
             }
 
-
+// Update enemies with line-of-sight
             for(Sprite s: enemies){
-                double dx=posX-s.x, dy=posY-s.y;
-                double dist=Math.sqrt(dx*dx+dy*dy);
-                if(dist>0.5){
-                    s.x += dx/dist*0.02;
-                    s.y += dy/dist*0.02;
-                } else if(!inBattle){
+                double dx = posX - s.x;
+                double dy = posY - s.y;
+                double dist = Math.sqrt(dx*dx + dy*dy);
+
+                // Check line of sight using simple step along the line
+                boolean canSeePlayer = false;
+                int steps = (int)(dist * 10); // more steps for accuracy
+                for(int i=1; i<=steps; i++){
+                    double checkX = s.x + dx * i / steps;
+                    double checkY = s.y + dy * i / steps;
+                    if(worldMap[(int)checkX][(int)checkY] > 0){
+                        canSeePlayer = false;
+                        break;
+                    }
+                    canSeePlayer = true;
+                }
+
+                if(canSeePlayer && dist > 0.5){
+                    double moveX = dx/dist * 0.02;
+                    double moveY = dy/dist * 0.02;
+                    // check collisions before moving
+                    if(worldMap[(int)(s.x+moveX)][(int)s.y] == 0) s.x += moveX;
+                    if(worldMap[(int)s.x][(int)(s.y+moveY)] == 0) s.y += moveY;
+                } else if(dist <= 0.5){
                     // trigger battle
                     inBattle = true;
                     battleEnemy = s;
@@ -304,7 +325,7 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
             if(enemiesDefeated==10) unlockedMoves.add(new Move("suicidal charge", 30, -10));
         } else {
             // Enemy turn
-            playerHP -= 3;
+            playerHP -= 6;
             if(playerHP<=0){
                 JOptionPane.showMessageDialog(this,"You fainted! Game over!");
                 System.exit(0);
