@@ -97,7 +97,6 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
             enemyTex1 = ImageIO.read(getClass().getResource("/skeleton.png"));
             enemyTex2 = ImageIO.read(getClass().getResource("/burber.png"));
         } catch (IOException e) { e.printStackTrace(); }
-        playBackground("/bg.wav");
 // für ein neuen gegenr kopier ein for loop change die vorvor letzen line ints zu r ächsten zahl neue gegener gehören ganz oben Kopiere hier!
 
 // gegner spawnen (burger)
@@ -189,7 +188,7 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
             g.drawString("Choose a move:", 150, 160);
             g.drawString("an enemy has found you and wants to battle", 300, 100);
 
-            // Show unlocked moves
+            // Show unlocked moves (NICHT ANFASSEN)
             for (int i = 0; i < unlockedMoves.size(); i++) {
                 Move m = unlockedMoves.get(i);
                 g.drawString((i+1) + ". " + m.name, 180, 190 + i*20);
@@ -332,7 +331,7 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
             planeY=oldPlaneX*Math.sin(rotSpeed)+planeY*Math.cos(rotSpeed);
         }
     }
-//csgo movement
+
     void playerTurn(Move move){
         enemyHP -= move.damage;
         playerHP += move.heal;
@@ -351,7 +350,7 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
             playerHP = playerHP+5;
             playerLevel += 1;
 
-            // Unlock new moves after defeating enemies
+            // Unlock new moves after defeating enemies(l)
             if(enemiesDefeated==1) unlockedMoves.add(new Move("Crossbow", 8, 0));
             if(enemiesDefeated==1) unlockedMoves.add(new Move("absorb", 1, 4));
             if(enemiesDefeated==3) unlockedMoves.add(new Move("Mega Strike", 12, 0));
@@ -359,8 +358,8 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
             if(enemiesDefeated==10) unlockedMoves.add(new Move("suicidal charge", 30, -10));
             if(enemiesDefeated==100) unlockedMoves.add(new Move("Deyan", 100000000, 0));
         } else {
-            // Enemy turn
-            playerHP -= 6;
+            // Enemy turn(no touchy)
+            playerHP -= battleEnemy.damage;
             if(playerHP<=0){
                 JOptionPane.showMessageDialog(this,"You died");
                 System.exit(0);
