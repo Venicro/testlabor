@@ -12,8 +12,8 @@ import java.net.URL;
 import javax.sound.sampled.*;
 
 public class Raycaster extends JPanel implements KeyListener, Runnable {
-    final int screenWidth = 640;
-    final int screenHeight = 480;
+    final int screenWidth = 1800;
+    final int screenHeight = 1080;
 
     final int mapWidth = 24;
     final int mapHeight = 24;
@@ -22,7 +22,7 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
             {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
             {1,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
             {1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-            {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+            {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,0,1},
             {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
             {1,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,1},
             {1,0,0,0,0,0,0,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,0,1},
@@ -56,9 +56,10 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
         double x, y;
         int health;
         int damage;
+        static String name = "";
         BufferedImage tex;
-        Sprite(double x, double y, BufferedImage tex, int health, int damage){
-            this.x = x; this.y = y; this.tex = tex; this.health = health; this.damage = damage;
+        Sprite(double x, double y, BufferedImage tex, int health, int damage, String name){
+            this.x = x; this.y = y; this.tex = tex; this.health = health; this.damage = damage; this.name = name;
         }
     }
 
@@ -71,7 +72,6 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
 
     BufferedImage enemyTex;
 
-    // Define moves
     static class Move {
         String name;
         int damage;
@@ -99,13 +99,24 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
         for (int x = 0; x < mapWidth; x++) {
             for (int y = 0; y < mapHeight; y++) {
                 if (x >= 0 && x < worldMap.length && y >= 0 && y < worldMap[0].length) {
-                    if (worldMap[x][y] >= 2 && worldMap[x][y] <= 4) {
-                        enemies.add(new Sprite(x + 0.5, y + 0.5, enemyTex, 10,5));
+                    if (worldMap[x][y] >= 6 && worldMap[x][y] <= 7) {
+                        enemies.add(new Sprite(x + 0.5, y + 0.5, enemyTex, 10,5,"Treeguy"));
                         worldMap[x][y] = 0;
                     }
                 }
             }
         }
+        for (int x = 0; x < mapWidth; x++) {
+            for (int y = 0; y < mapHeight; y++) {
+                if (x >= 0 && x < worldMap.length && y >= 0 && y < worldMap[0].length) {
+                    if (worldMap[x][y] >= 2 && worldMap[x][y] <= 4) {
+                        enemies.add(new Sprite(x + 0.5, y + 0.5, enemyTex, 10,5,"goober"));
+                        worldMap[x][y] = 0;
+                    }
+                }
+            }
+        }
+
 
 
         unlockedMoves.add(new Move("Attack", 5, 0));
@@ -157,6 +168,7 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
             g.drawString("Player HP: " + playerHP, 70, 120);
             g.drawString("Enemy HP: " + enemyHP, 400, 120);
             g.drawString("Choose a move:", 150, 160);
+            g.drawString("a "+Sprite.name+" has found you and wants to battle!", 300, 100);
 
             // Show unlocked moves
             for (int i = 0; i < unlockedMoves.size(); i++) {
@@ -229,7 +241,6 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
                 if(canSeePlayer && dist > 0.5){
                     double moveX = dx/dist * 0.02;
                     double moveY = dy/dist * 0.02;
-                    // check collisions before moving
                     if(worldMap[(int)(s.x+moveX)][(int)s.y] == 0) s.x += moveX;
                     if(worldMap[(int)s.x][(int)(s.y+moveY)] == 0) s.y += moveY;
                 } else if(dist <= 0.5){
@@ -237,6 +248,7 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
                     inBattle = true;
                     battleEnemy = s;
                     enemyHP = s.health;
+                    String name = s.name;
                     playBattle("/battle.wav");
                 }
             }
@@ -309,7 +321,7 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
 
         if(move.damage>0) playEffect("/attack.wav");
         if(move.heal>0) playEffect("/heal.wav");
-        if(move.damage>11) playEffect("/attack.wav");
+        if(move.damage==8) playEffect("/crossbow.wav");
 
 
         if(enemyHP<=0){
@@ -317,9 +329,12 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
             inBattle=false;
             battleEnemy=null;
             enemiesDefeated++;
+            playerHP = playerHP+5;
+            playerLevel += 1;
 
             // Unlock new moves after defeating enemies
-            if(enemiesDefeated==1) unlockedMoves.add(new Move("Strong Attack", 8, 0));
+            if(enemiesDefeated==1) unlockedMoves.add(new Move("Crossbow", 8, 0));
+            if(enemiesDefeated==1) unlockedMoves.add(new Move("absorb", 1, 4));
             if(enemiesDefeated==3) unlockedMoves.add(new Move("Mega Strike", 12, 0));
             if(enemiesDefeated==5) unlockedMoves.add(new Move("Full Heal", 0, 20));
             if(enemiesDefeated==10) unlockedMoves.add(new Move("suicidal charge", 30, -10));
@@ -327,7 +342,7 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
             // Enemy turn
             playerHP -= 6;
             if(playerHP<=0){
-                JOptionPane.showMessageDialog(this,"You fainted! Game over!");
+                JOptionPane.showMessageDialog(this,"You died");
                 System.exit(0);
             }
         }
