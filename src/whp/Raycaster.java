@@ -149,6 +149,8 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
     public void paintComponent(Graphics g){
         g.drawImage(screen,0,0,null);
         if(inBattle){
+            g.setColor(Color.BLACK);
+            g.fillRect(50, 50, 540, 380);
             g.setColor(Color.RED);
             g.drawString("BATTLE!", 300, 80);
             g.setColor(Color.WHITE);
@@ -307,7 +309,7 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
 
         if(move.damage>0) playEffect("/attack.wav");
         if(move.heal>0) playEffect("/heal.wav");
-        if(move.heal>0) playEffect("/heal.wav");
+        if(move.damage>11) playEffect("/attack.wav");
 
 
         if(enemyHP<=0){
