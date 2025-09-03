@@ -100,7 +100,7 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
             for (int y = 0; y < mapHeight; y++) {
                 if (x >= 0 && x < worldMap.length && y >= 0 && y < worldMap[0].length) {
                     if (worldMap[x][y] >= 2 && worldMap[x][y] <= 4) {
-                        enemies.add(new Sprite(x + 0.5, y + 0.5, enemyTex, 80,10));
+                        enemies.add(new Sprite(x + 0.5, y + 0.5, enemyTex, 10,5));
                         worldMap[x][y] = 0;
                     }
                 }
@@ -149,8 +149,6 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
     public void paintComponent(Graphics g){
         g.drawImage(screen,0,0,null);
         if(inBattle){
-            g.setColor(Color.BLACK);
-            g.fillRect(50, 50, 540, 380);
             g.setColor(Color.RED);
             g.drawString("BATTLE!", 300, 80);
             g.setColor(Color.WHITE);
