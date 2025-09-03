@@ -84,7 +84,7 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
     Clip battleClip;
 
     java.util.List<Move> unlockedMoves = new ArrayList<>();
-
+//main class
     public Raycaster() {
         screen = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_RGB);
         pixels = ((DataBufferInt) screen.getRaster().getDataBuffer()).getData();
@@ -98,6 +98,8 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
             enemyTex2 = ImageIO.read(getClass().getResource("/burber.png"));
         } catch (IOException e) { e.printStackTrace(); }
         playBackground("/bg.wav");
+// für ein neuen gegenr kopier ein for loop change die vorvor letzen line ints zu r ächsten zahl neue gegener gehören ganz oben!
+
 // gegner spawnen (burger)
         for (int x = 0; x < mapWidth; x++) {
             for (int y = 0; y < mapHeight; y++) {
@@ -172,7 +174,7 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
         }).start();
     }
 
-
+//Battle UI
     @Override
     public void paintComponent(Graphics g){
         g.drawImage(screen,0,0,null);
@@ -194,7 +196,7 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
             }
         }
     }
-
+//render NICHT ANFASSEN
     public void render(){
         if(!inBattle){
             Arrays.fill(pixels, 0x87CEEB);
@@ -330,7 +332,7 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
             planeY=oldPlaneX*Math.sin(rotSpeed)+planeY*Math.cos(rotSpeed);
         }
     }
-
+//csgo movement
     void playerTurn(Move move){
         enemyHP -= move.damage;
         playerHP += move.heal;
@@ -365,7 +367,7 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
             }
         }
     }
-
+//controls garbage
     @Override public void keyPressed(KeyEvent e){
         keys[e.getKeyCode()]=true;
 
@@ -381,7 +383,7 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
     }
     @Override public void keyReleased(KeyEvent e){ keys[e.getKeyCode()]=false; }
     @Override public void keyTyped(KeyEvent e){}
-
+//runtiem garbage
     @Override
     public void run(){
         while(true){
@@ -390,7 +392,7 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
             try{Thread.sleep(16);}catch(Exception ignored){}
         }
     }
-
+//start shi
     public static void main(String[] args){
         JFrame frame=new JFrame("Dungeonexplorerer3D");
         Raycaster rc=new Raycaster();
