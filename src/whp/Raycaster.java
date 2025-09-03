@@ -25,7 +25,7 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
             {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,0,1},
             {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
             {1,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,1},
-            {1,0,0,0,0,0,0,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,0,1},
+            {1,0,0,0,0,0,0,0,0,0,1,0,2,0,8,0,0,0,0,0,0,0,0,1},
             {1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1},
             {1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1},
             {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
@@ -71,6 +71,8 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
     java.util.List<Sprite> enemies = new ArrayList<>();
 
     BufferedImage enemyTex;
+    BufferedImage enemyTex1;
+    BufferedImage enemyTex2;
 
     static class Move {
         String name;
@@ -92,8 +94,21 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
 
         try {
             enemyTex = ImageIO.read(getClass().getResource("/sprite2.png"));
+            enemyTex1 = ImageIO.read(getClass().getResource("/skeleton.png"));
+            enemyTex2 = ImageIO.read(getClass().getResource("/burber.png"));
         } catch (IOException e) { e.printStackTrace(); }
         playBackground("/bg.wav");
+
+        for (int x = 0; x < mapWidth; x++) {
+            for (int y = 0; y < mapHeight; y++) {
+                if (x >= 0 && x < worldMap.length && y >= 0 && y < worldMap[0].length) {
+                    if (worldMap[x][y] >= 8 && worldMap[x][y] <= 9) {
+                        enemies.add(new Sprite(x + 0.5, y + 0.5, enemyTex2, 30,5,"goober"));
+                        worldMap[x][y] = 0;
+                    }
+                }
+            }
+        }
 
 
         for (int x = 0; x < mapWidth; x++) {
@@ -110,12 +125,13 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
             for (int y = 0; y < mapHeight; y++) {
                 if (x >= 0 && x < worldMap.length && y >= 0 && y < worldMap[0].length) {
                     if (worldMap[x][y] >= 2 && worldMap[x][y] <= 4) {
-                        enemies.add(new Sprite(x + 0.5, y + 0.5, enemyTex, 9,5,"goober"));
+                        enemies.add(new Sprite(x + 0.5, y + 0.5, enemyTex1, 9,5,"goober"));
                         worldMap[x][y] = 0;
                     }
                 }
             }
         }
+
 
 
 
@@ -338,6 +354,7 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
             if(enemiesDefeated==3) unlockedMoves.add(new Move("Mega Strike", 12, 0));
             if(enemiesDefeated==5) unlockedMoves.add(new Move("Full Heal", 0, 20));
             if(enemiesDefeated==10) unlockedMoves.add(new Move("suicidal charge", 30, -10));
+            if(enemiesDefeated==100) unlockedMoves.add(new Move("Deyan", 100000000, 0));
         } else {
             // Enemy turn
             playerHP -= 6;
