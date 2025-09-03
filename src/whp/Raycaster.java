@@ -98,7 +98,7 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
             enemyTex2 = ImageIO.read(getClass().getResource("/burber.png"));
         } catch (IOException e) { e.printStackTrace(); }
         playBackground("/bg.wav");
-// für ein neuen gegenr kopier ein for loop change die vorvor letzen line ints zu r ächsten zahl neue gegener gehören ganz oben!
+// für ein neuen gegenr kopier ein for loop change die vorvor letzen line ints zu r ächsten zahl neue gegener gehören ganz oben Kopiere hier!
 
 // gegner spawnen (burger)
         for (int x = 0; x < mapWidth; x++) {
