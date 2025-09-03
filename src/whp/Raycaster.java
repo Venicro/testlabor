@@ -100,7 +100,7 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
             for (int y = 0; y < mapHeight; y++) {
                 if (x >= 0 && x < worldMap.length && y >= 0 && y < worldMap[0].length) {
                     if (worldMap[x][y] >= 6 && worldMap[x][y] <= 7) {
-                        enemies.add(new Sprite(x + 0.5, y + 0.5, enemyTex, 10,5,"Treeguy"));
+                        enemies.add(new Sprite(x + 0.5, y + 0.5, enemyTex, 20,8,"Treeguy"));
                         worldMap[x][y] = 0;
                     }
                 }
@@ -110,7 +110,7 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
             for (int y = 0; y < mapHeight; y++) {
                 if (x >= 0 && x < worldMap.length && y >= 0 && y < worldMap[0].length) {
                     if (worldMap[x][y] >= 2 && worldMap[x][y] <= 4) {
-                        enemies.add(new Sprite(x + 0.5, y + 0.5, enemyTex, 10,5,"goober"));
+                        enemies.add(new Sprite(x + 0.5, y + 0.5, enemyTex, 9,5,"goober"));
                         worldMap[x][y] = 0;
                     }
                 }
@@ -168,7 +168,7 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
             g.drawString("Player HP: " + playerHP, 70, 120);
             g.drawString("Enemy HP: " + enemyHP, 400, 120);
             g.drawString("Choose a move:", 150, 160);
-            g.drawString("a "+Sprite.name+" has found you and wants to battle!", 300, 100);
+            g.drawString("an enemy has found you and wants to battle", 300, 100);
 
             // Show unlocked moves
             for (int i = 0; i < unlockedMoves.size(); i++) {
