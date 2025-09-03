@@ -98,7 +98,7 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
             enemyTex2 = ImageIO.read(getClass().getResource("/burber.png"));
         } catch (IOException e) { e.printStackTrace(); }
         playBackground("/bg.wav");
-
+// gegner spawnen (burger)
         for (int x = 0; x < mapWidth; x++) {
             for (int y = 0; y < mapHeight; y++) {
                 if (x >= 0 && x < worldMap.length && y >= 0 && y < worldMap[0].length) {
@@ -110,7 +110,7 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
             }
         }
 
-
+// gegner spawnen (Baum bro)
         for (int x = 0; x < mapWidth; x++) {
             for (int y = 0; y < mapHeight; y++) {
                 if (x >= 0 && x < worldMap.length && y >= 0 && y < worldMap[0].length) {
@@ -121,6 +121,7 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
                 }
             }
         }
+        // gegner spawnen (Skelettkopf)
         for (int x = 0; x < mapWidth; x++) {
             for (int y = 0; y < mapHeight; y++) {
                 if (x >= 0 && x < worldMap.length && y >= 0 && y < worldMap[0].length) {
