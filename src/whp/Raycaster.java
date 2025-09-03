@@ -205,15 +205,15 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
                 zBuffer[x]=perpWallDist;
             }
 
-// Update enemies with line-of-sight
+
             for(Sprite s: enemies){
                 double dx = posX - s.x;
                 double dy = posY - s.y;
                 double dist = Math.sqrt(dx*dx + dy*dy);
 
-                // Check line of sight using simple step along the line
+
                 boolean canSeePlayer = false;
-                int steps = (int)(dist * 10); // more steps for accuracy
+                int steps = (int)(dist * 10);
                 for(int i=1; i<=steps; i++){
                     double checkX = s.x + dx * i / steps;
                     double checkY = s.y + dy * i / steps;
