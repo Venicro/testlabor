@@ -388,10 +388,10 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
         while(true){
             updateMovement();
             render();
-            try{Thread.sleep(16);}catch(Exception ignored){}
+            try{Thread.sleep(30);}catch(Exception ignored){}
         }
     }
-//start shi
+//start shi :3
     public static void main(String[] args){
         JFrame frame=new JFrame("Dungeonexplorerer3D");
         Raycaster rc=new Raycaster();
@@ -401,5 +401,6 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
         frame.setVisible(true);
         rc.requestFocusInWindow();
         new Thread(rc).start();
+
     }
 }
