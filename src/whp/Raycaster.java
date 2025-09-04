@@ -56,7 +56,7 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
         double x, y;
         int health;
         int damage;
-        static String name = "";
+        static String name;
         BufferedImage tex;
         Sprite(double x, double y, BufferedImage tex, int health, int damage, String name){
             this.x = x; this.y = y; this.tex = tex; this.health = health; this.damage = damage; this.name = name;
@@ -104,7 +104,7 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
             for (int y = 0; y < mapHeight; y++) {
                 if (x >= 0 && x < worldMap.length && y >= 0 && y < worldMap[0].length) {
                     if (worldMap[x][y] >= 8 && worldMap[x][y] <= 9) {
-                        enemies.add(new Sprite(x + 0.5, y + 0.5, enemyTex2, 30,5,"goober"));
+                        enemies.add(new Sprite(x + 0.5, y + 0.5, enemyTex2, 30,5,"Burger"));
                         worldMap[x][y] = 0;
                     }
                 }
@@ -127,7 +127,7 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
             for (int y = 0; y < mapHeight; y++) {
                 if (x >= 0 && x < worldMap.length && y >= 0 && y < worldMap[0].length) {
                     if (worldMap[x][y] >= 2 && worldMap[x][y] <= 4) {
-                        enemies.add(new Sprite(x + 0.5, y + 0.5, enemyTex1, 9,5,"goober"));
+                        enemies.add(new Sprite(x + 0.5, y + 0.5, enemyTex1, 9,5,"Skeletonhead"));
                         worldMap[x][y] = 0;
                     }
                 }
@@ -186,7 +186,7 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
             g.drawString("Player HP: " + playerHP, 70, 120);
             g.drawString("Enemy HP: " + enemyHP, 400, 120);
             g.drawString("Choose a move:", 150, 160);
-            g.drawString("an enemy has found you and wants to battle", 300, 100);
+            g.drawString("an enemy has found you!", 300, 100);
 
             // Show unlocked moves (NICHT ANFASSEN)
             for (int i = 0; i < unlockedMoves.size(); i++) {
