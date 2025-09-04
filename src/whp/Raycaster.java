@@ -57,9 +57,10 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
         int health;
         int damage;
         static String name;
+        int level;
         BufferedImage tex;
-        Sprite(double x, double y, BufferedImage tex, int health, int damage, String name){
-            this.x = x; this.y = y; this.tex = tex; this.health = health; this.damage = damage; this.name = name;
+        Sprite(double x, double y, BufferedImage tex, int health, int damage, String name, int level){
+            this.x = x; this.y = y; this.tex = tex; this.health = health; this.damage = damage; this.name = name; this.level =level;
         }
     }
 
@@ -104,7 +105,7 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
             for (int y = 0; y < mapHeight; y++) {
                 if (x >= 0 && x < worldMap.length && y >= 0 && y < worldMap[0].length) {
                     if (worldMap[x][y] >= 8 && worldMap[x][y] <= 9) {
-                        enemies.add(new Sprite(x + 0.5, y + 0.5, enemyTex2, 30,5,"Burger"));
+                        enemies.add(new Sprite(x + 0.5, y + 0.5, enemyTex2, 50,10,"Burger",10));
                         worldMap[x][y] = 0;
                     }
                 }
@@ -116,7 +117,7 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
             for (int y = 0; y < mapHeight; y++) {
                 if (x >= 0 && x < worldMap.length && y >= 0 && y < worldMap[0].length) {
                     if (worldMap[x][y] >= 6 && worldMap[x][y] <= 7) {
-                        enemies.add(new Sprite(x + 0.5, y + 0.5, enemyTex, 20,8,"Treeguy"));
+                        enemies.add(new Sprite(x + 0.5, y + 0.5, enemyTex, 20,8,"Treeguy",5));
                         worldMap[x][y] = 0;
                     }
                 }
@@ -127,7 +128,7 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
             for (int y = 0; y < mapHeight; y++) {
                 if (x >= 0 && x < worldMap.length && y >= 0 && y < worldMap[0].length) {
                     if (worldMap[x][y] >= 2 && worldMap[x][y] <= 4) {
-                        enemies.add(new Sprite(x + 0.5, y + 0.5, enemyTex1, 9,5,"Skeletonhead"));
+                        enemies.add(new Sprite(x + 0.5, y + 0.5, enemyTex1, 9,5,"Skeletonhead",2));
                         worldMap[x][y] = 0;
                     }
                 }
@@ -186,7 +187,7 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
             g.drawString("Player HP: " + playerHP, 70, 120);
             g.drawString("Enemy HP: " + enemyHP, 400, 120);
             g.drawString("Choose a move:", 150, 160);
-            g.drawString("an enemy has found you!", 300, 100);
+            g.drawString("a level "+battleEnemy.level+"enemy has found you!", 300, 100);
 
             // Show unlocked moves (NICHT ANFASSEN)
             for (int i = 0; i < unlockedMoves.size(); i++) {
@@ -396,7 +397,7 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
         while(true){
             updateMovement();
             render();
-            try{Thread.sleep(30);}catch(Exception ignored){}
+            try{Thread.sleep(19);}catch(Exception ignored){}
         }
     }
 //start shi >_<
