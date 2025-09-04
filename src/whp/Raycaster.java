@@ -187,7 +187,7 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
             g.drawString("Player HP: " + playerHP, 70, 120);
             g.drawString("Enemy HP: " + enemyHP, 400, 120);
             g.drawString("Choose a move:", 150, 160);
-            g.drawString("a level "+battleEnemy.level+"enemy has found you!", 300, 100);
+            g.drawString("a level "+battleEnemy.level+" enemy has found you! "+"he deals on average "+battleEnemy.damage+" damage", 200, 100);
 
             // Show unlocked moves (NICHT ANFASSEN)
             for (int i = 0; i < unlockedMoves.size(); i++) {
