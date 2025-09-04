@@ -20,27 +20,27 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
 
     int[][] worldMap = {
             {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-            {1,2,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,1},
-            {1,0,1,0,0,0,0,0,0,0,0,0,1,8,0,0,0,0,0,0,0,0,0,1},
-            {1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,6,0,1},
-            {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-            {1,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,1},
-            {1,0,0,0,0,0,0,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,0,1},
-            {1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1},
-            {1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1},
-            {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-            {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-            {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-            {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-            {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-            {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-            {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-            {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-            {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-            {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-            {1,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,1},
-            {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-            {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+            {1,2,0,0,0,0,1,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,1},
+            {1,0,1,0,0,0,2,0,0,0,0,0,1,8,0,0,0,0,1,1,1,1,1,1},
+            {1,0,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,1,0,0,6,1,1},
+            {1,0,0,0,0,0,2,1,6,0,0,0,6,0,1,0,0,0,0,0,0,0,1,1},
+            {1,0,0,0,0,0,1,1,0,0,1,1,1,1,1,1,1,1,1,0,1,1,1,1},
+            {1,0,0,0,0,0,2,0,0,0,1,0,2,0,0,0,0,0,1,0,1,0,0,1},
+            {1,0,1,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,1,0,1,0,0,1},
+            {1,0,1,0,0,0,2,0,0,0,1,0,0,0,0,1,0,0,1,0,1,0,0,1},
+            {1,0,2,1,1,1,1,1,1,1,1,0,0,0,0,1,0,0,1,0,1,1,1,1},
+            {1,0,1,1,0,0,0,0,0,0,1,0,0,0,0,1,0,0,1,0,0,0,1,1},
+            {1,0,2,1,0,0,0,0,0,0,1,0,0,0,0,1,0,0,1,1,1,0,1,1},
+            {1,0,1,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,2,1,0,1,1},
+            {1,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,1,1,1,0,1,1},
+            {1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,1},
+            {1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,1},
+            {1,0,0,0,1,0,2,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1},
+            {1,0,0,0,1,1,1,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,1},
+            {1,0,0,0,0,0,2,0,0,0,0,0,1,0,0,1,0,0,1,1,0,0,0,1},
+            {1,0,0,0,2,0,0,0,0,0,0,0,1,0,0,1,0,0,1,1,0,2,0,1},
+            {1,0,2,0,0,0,2,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1},
+            {1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1},
             {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
     };
 
@@ -271,7 +271,7 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
                 }
             }
 
-
+//render garbage
             for(Sprite s: enemies){
                 double spriteX=s.x-posX, spriteY=s.y-posY;
                 double invDet=1.0/(planeX*dirY-dirX*planeY);
@@ -302,7 +302,7 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
 
         repaint();
     }
-
+//csgo movement
     void updateMovement(){
         if(inBattle) return;
         double moveSpeed=0.05, rotSpeed=0.03;
@@ -331,7 +331,7 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
             planeY=oldPlaneX*Math.sin(rotSpeed)+planeY*Math.cos(rotSpeed);
         }
     }
-
+//combat system BITTE ÄNDERT DAS ENDLICH
     void playerTurn(Move move){
         enemyHP -= move.damage;
         playerHP += move.heal;
@@ -350,13 +350,21 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
             playerHP = playerHP+5;
             playerLevel += 1;
 
-            // Unlock new moves after defeating enemies(l)
-            if(enemiesDefeated==1) unlockedMoves.add(new Move("Crossbow", 8, 0));
-            if(enemiesDefeated==1) unlockedMoves.add(new Move("absorb", 1, 4));
-            if(enemiesDefeated==3) unlockedMoves.add(new Move("Mega Strike", 12, 0));
-            if(enemiesDefeated==5) unlockedMoves.add(new Move("Full Heal", 0, 20));
-            if(enemiesDefeated==10) unlockedMoves.add(new Move("suicidal charge", 30, -10));
-            if(enemiesDefeated==100) unlockedMoves.add(new Move("Deyan", 100000000, 0));
+            // Unlock new moves after defeating enemies (pls nah)
+            if(enemiesDefeated==1) unlockedMoves.add(new Move("Crossbow!", 8, 0));
+            if(enemiesDefeated==1) unlockedMoves.add(new Move("absorb!", 1, 4));
+            if(enemiesDefeated==3) unlockedMoves.add(new Move("Mega Strike!", 12, 0));
+            if(enemiesDefeated==5) unlockedMoves.add(new Move("Full Heal!", 0, 20));
+            if(enemiesDefeated==10) unlockedMoves.add(new Move("suicidal charge!", 30, -10));
+            if(enemiesDefeated==20) unlockedMoves.add(new Move("flame engulf!", 30, -3));
+            if(enemiesDefeated==30) unlockedMoves.add(new Move("Green tornado!", 10, 20));
+            if(enemiesDefeated==40) unlockedMoves.add(new Move("Greatsword!", 25, 0));
+            if(enemiesDefeated==50) unlockedMoves.add(new Move("Bow!", 20, 1));
+            if(enemiesDefeated==60) unlockedMoves.add(new Move("Sneak attack!", 30, 0));
+            if(enemiesDefeated==70) unlockedMoves.add(new Move("Rock punch!", 30, 0));
+            if(enemiesDefeated==80) unlockedMoves.add(new Move("Electric shock!", 50, -10));
+            if(enemiesDefeated==90) unlockedMoves.add(new Move("Mega absorb!", 10, 40));
+            if(enemiesDefeated==100) unlockedMoves.add(new Move("EXTERMINATE BEAM", 100, 0));
         } else {
             // Enemy turn(no touchy)
             playerHP -= battleEnemy.damage;
@@ -391,7 +399,7 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
             try{Thread.sleep(30);}catch(Exception ignored){}
         }
     }
-//start shi :3
+//start shi >_<
     public static void main(String[] args){
         JFrame frame=new JFrame("Dungeonexplorerer3D");
         Raycaster rc=new Raycaster();
@@ -401,6 +409,5 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
         frame.setVisible(true);
         rc.requestFocusInWindow();
         new Thread(rc).start();
-
     }
 }
