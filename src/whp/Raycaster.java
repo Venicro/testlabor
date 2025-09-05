@@ -123,12 +123,12 @@ public class Raycaster extends JPanel implements KeyListener, Runnable {
         } catch (IOException e) { e.printStackTrace(); }
 // für ein neuen gegenr kopier ein for loop change die vorvor letzen line ints zu r ächsten zahl neue gegener gehören ganz oben Kopiere hier!
 
-// gegner spawnen (burger)
+// gegner spawnen (transgender)
         for (int x = 0; x < mapWidth; x++) {
             for (int y = 0; y < mapHeight; y++) {
                 if (x >= 0 && x < worldMap.length && y >= 0 && y < worldMap[0].length) {
                     if (worldMap[x][y] >= 8 && worldMap[x][y] <= 9) {
-                        enemies.add(new Sprite(x + 0.5, y + 0.5, enemyTex2, 50,10,"Burger",10));
+                        enemies.add(new Sprite(x + 0.5, y + 0.5, enemyTex2, 50,10,"Delusion",10));
                         worldMap[x][y] = 0;
                     }
                 }
